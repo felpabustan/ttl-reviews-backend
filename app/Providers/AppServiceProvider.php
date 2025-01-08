@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\RateLimiter;
 use App\Repositories\Review\ReviewRepository;
 use App\Repositories\Review\ReviewRepositoryInterface;
 

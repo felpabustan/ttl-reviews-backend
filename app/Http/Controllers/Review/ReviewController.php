@@ -49,7 +49,7 @@ class ReviewController extends Controller
      */
     public function show(string $id)
     {
-        $review = $this->reviewRepository->getReviewById($id);
+        $review = $this->reviewRepository->getReview($id);
         if (!$review) {
             return response()->json(['message' => 'Review not found'], 404);
         }

@@ -2,46 +2,49 @@
 namespace App\Repositories\Review;
 
 use App\Models\Review\Review;
+use App\Repositories\Repository;
 use Carbon\Carbon;
 use Exception;
 
-class ReviewRepository implements ReviewRepositoryInterface
+class ReviewRepository extends Repository implements ReviewRepositoryInterface
 {
-    public function getAllReviews()
+    public function __construct()
     {
-        return Review::paginate(50);
+        $this->model = new Review();
+        parent::__construct($this->model);
     }
 
-    public function getReviewById($id)
+    public function getAllReviews()
     {
-        return Review::find($id);
+        return $this->model->paginate(50);
+    }
+
+    public function getReview($id): Review
+    {
+        return $this->find($id);
     }
 
     public function createReview(array $data)
     {
         $data['review_date'] = Carbon::parse($data['review_date'])->format('Y-m-d H:i:s');
 
-        return Review::create($data);
+        return $this->create($data);
     }
 
     public function updateReview($id, array $data)
     {
-        $review = Review::find($id);
-        if ($review) {
-            $review->update($data);
-            return $review->fresh();
-        }
-        return null;
+        $review = $this->update($id, $data);
+        
+        return $review->fresh();
     }
 
     public function deleteReview($id)
     {
-        $review = Review::find($id);
-        if ($review) {
-            $review->delete();
-            return true;
+        try {
+            return $this->delete($id) ? true : false;
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     public function importReviews($file)

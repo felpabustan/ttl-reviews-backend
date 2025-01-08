@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Review;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreReviewRequest;
+use App\Http\Requests\UpdateReviewRequest;
 use App\Repositories\Review\ReviewRepositoryInterface;
 
 class ReviewController extends Controller
@@ -27,19 +29,9 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreReviewRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'product_name' => 'required|string|max:255',
-            'reviewer' => 'required|string',
-            'content' => 'required|string',
-            'rating' => 'required|integer|min:1|max:5',
-            'review_url' => 'sometimes|string',
-            'reviewer_avatar_url' => 'sometimes|string',
-            'review_date' => 'required|date',
-        ]);
-
+        $data = $request->validated();
         $review = $this->reviewRepository->createReview($data);
         return response()->json($review, 201);
     }
@@ -59,19 +51,9 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateReviewRequest $request, string $id)
     {
-        $data = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'product_name' => 'sometimes|string|max:255',
-            'reviewer' => 'sometimes|string',
-            'content' => 'sometimes|string',
-            'rating' => 'sometimes|integer|min:1|max:5',
-            'review_url' => 'sometimes|string',
-            'reviewer_avatar_url' => 'sometimes|string',
-            'review_date' => 'sometimes|date',
-            'status' => 'sometimes|string',
-        ]);
+        $data = $request->validated();
 
         $review = $this->reviewRepository->updateReview($id, $data);
         if (!$review) {

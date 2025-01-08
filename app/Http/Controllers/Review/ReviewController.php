@@ -70,6 +70,7 @@ class ReviewController extends Controller
             'review_url' => 'sometimes|string',
             'reviewer_avatar_url' => 'sometimes|string',
             'review_date' => 'sometimes|date',
+            'status' => 'sometimes|string',
         ]);
 
         $review = $this->reviewRepository->updateReview($id, $data);

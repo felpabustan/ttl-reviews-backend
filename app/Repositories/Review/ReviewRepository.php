@@ -28,10 +28,6 @@ class ReviewRepository implements ReviewRepositoryInterface
     {
         $review = Review::find($id);
         if ($review) {
-            if (isset($data['review_date'])) {
-                $data['review_date'] = Carbon::parse($data['review_date'])->format('Y-m-d H:i:s');
-            }
-
             $review->update($data);
             return $review->fresh();
         }

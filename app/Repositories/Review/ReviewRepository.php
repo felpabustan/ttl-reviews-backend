@@ -78,6 +78,8 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
                     'product_name' => $row['Reviewed Product/Establishment'],
                     'reviewer' => $row['Reviewer'],
                     'content' => $row['Content'],
+                    'review_url' => $row['Review URL'],
+                    'reviewer_avatar_url' => $row['Reviewer Avatar URL'],
                     'rating' => $row['Rating'],
                     'status' => $row['Status'],
                     'review_date' => Carbon::parse($row['Date Reviewed'])->format('Y-m-d H:i:s'),

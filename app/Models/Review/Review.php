@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'product_name',
+        'reviewer',
+        'content',
+        'review_url',
+        'reviewer_avatar_url',
+        'rating',
+        'status',
+        'review_date',
+    ];
 }

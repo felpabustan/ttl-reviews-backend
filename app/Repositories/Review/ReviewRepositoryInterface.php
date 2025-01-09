@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories\Review;
+use Illuminate\Http\Request;
 
 use App\Models\Review\Review;
 
@@ -15,7 +16,7 @@ interface ReviewRepositoryInterface
      *
      * @return mixed
      */
-    public function getAllReviews();
+    public function getAllReviews(Request $request);
 
     /**
      * Retrieve a specific review by its ID.
@@ -23,7 +24,7 @@ interface ReviewRepositoryInterface
      * @param int $id The ID of the review.
      * @return mixed
      */
-    public function getReview($id);
+    public function getReview($id): Review;
 
     /**
      * Create a new review.
@@ -31,7 +32,7 @@ interface ReviewRepositoryInterface
      * @param array $data The data for the new review.
      * @return mixed
      */
-    public function createReview(array $data);
+    public function createReview(array $data): Review;
 
     /**
      * Update an existing review.
@@ -40,7 +41,7 @@ interface ReviewRepositoryInterface
      * @param array $data The new data for the review.
      * @return mixed
      */
-    public function updateReview($id, array $data);
+    public function updateReview($id, array $data): Review;
 
     /**
      * Delete a review by its ID.

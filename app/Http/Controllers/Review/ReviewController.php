@@ -20,9 +20,9 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reviews = $this->reviewRepository->getAllReviews();
+        $reviews = $this->reviewRepository->getAllReviews($request);
         return response()->json($reviews);
     }
 

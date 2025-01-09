@@ -3,6 +3,7 @@ namespace App\Repositories\Review;
 
 use App\Models\Review\Review;
 use App\Repositories\Repository;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
 
@@ -14,9 +15,32 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
         parent::__construct($this->model);
     }
 
-    public function getAllReviews()
+    public function getAllReviews(Request $request)
     {
-        return $this->model->paginate(50);
+        $query = $this->model->query();
+    
+        $filters = [
+            'title' => 'like',
+            'status' => '=',
+            'product_name' => 'like',
+            'rating' => '=',
+            'review_date' => '='
+        ];
+    
+        foreach ($filters as $field => $operator) {
+            if ($request->has($field)) {
+                $value = $request->input($field);
+                if ($operator === 'like') {
+                    $query->where($field, $operator, '%' . $value . '%');
+                } elseif ($field === 'review_date') {
+                    $query->whereDate($field, $value);
+                } else {
+                    $query->where($field, $operator, $value);
+                }
+            }
+        }
+    
+        return $query->paginate($request->input('per_page', 50));
     }
 
     public function getReview($id): Review
@@ -24,14 +48,14 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
         return $this->find($id);
     }
 
-    public function createReview(array $data)
+    public function createReview(array $data): Review
     {
         $data['review_date'] = Carbon::parse($data['review_date'])->format('Y-m-d H:i:s');
 
         return $this->create($data);
     }
 
-    public function updateReview($id, array $data)
+    public function updateReview($id, array $data): Review
     {
         $review = $this->update($id, $data);
         

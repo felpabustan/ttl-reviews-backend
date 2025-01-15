@@ -13,6 +13,8 @@ class Review extends Model
         'content',
         'review_url',
         'reviewer_avatar_url',
+        'user_id',
+        'post_id',
         'rating',
         'status',
         'review_date',

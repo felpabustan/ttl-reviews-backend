@@ -24,7 +24,8 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
             'status' => '=',
             'product_name' => 'like',
             'rating' => '=',
-            'review_date' => '='
+            'review_date' => '=',
+            'review_url' => 'like',
         ];
     
         foreach ($filters as $field => $operator) {

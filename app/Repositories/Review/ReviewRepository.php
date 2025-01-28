@@ -41,7 +41,7 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
             }
         }
     
-        return $query->paginate($request->input('per_page', 50));
+        return $query->paginate($request->input('per_page', 10));
     }
 
     public function getReview($id): Review

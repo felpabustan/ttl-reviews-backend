@@ -101,6 +101,7 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
                 $reviewData = [
                     'title' => stripslashes($row['Title']),
                     'product_name' => $row['Reviewed Product/Establishment'],
+                    'product_image_url' => $row['Product Image URL'],   
                     'reviewer' => $row['Reviewer'],
                     'content' => stripslashes($row['Content']),
                     'review_url' => $row['Review URL'],

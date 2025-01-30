@@ -9,6 +9,7 @@ class Review extends Model
     protected $fillable = [
         'title',
         'product_name',
+        'product_image_url',
         'reviewer',
         'content',
         'review_url',

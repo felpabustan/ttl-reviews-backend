@@ -20,4 +20,19 @@ class Review extends Model
         'status',
         'review_date',
     ];
+
+    protected $appends = ['country'];
+
+    public function getCountryAttribute()
+    {
+        $url = $this->review_url;
+
+        if (strpos($url, '.sg') !== false) {
+            return 'Singapore';
+        } elseif (strpos($url, '.my') !== false) {
+            return 'Malaysia';
+        }
+
+        return 'Unknown';
+    }
 }

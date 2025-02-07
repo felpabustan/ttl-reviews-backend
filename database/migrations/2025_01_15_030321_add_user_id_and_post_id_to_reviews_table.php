@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reviews', function (Blueprint $table) {
-            $table->text('user_id')->nullable()->after('reviewer_avatar_url');
-            $table->text('post_id')->nullable()->after('user_id');
+            $table->integer('user_id')->nullable()->after('reviewer_avatar_url');
+            $table->integer('post_id')->nullable()->after('user_id');
         });
     }
 

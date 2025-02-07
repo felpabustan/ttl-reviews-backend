@@ -21,7 +21,10 @@ class Review extends Model
         'review_date',
     ];
 
-    protected $appends = ['country'];
+    protected $appends = [
+        'country',
+        'review_count',
+    ];
 
     public function getCountryAttribute()
     {
@@ -34,5 +37,10 @@ class Review extends Model
         }
 
         return 'Unknown';
+    }
+
+    public function getReviewCountAttribute()
+    {
+        return self::where('product_name', $this->product_name)->count();
     }
 }

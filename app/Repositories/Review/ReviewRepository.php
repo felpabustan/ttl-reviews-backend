@@ -26,6 +26,10 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
             'rating' => '=',
             'review_date' => '=',
             'review_url' => 'like',
+            'reviewer' => 'like',
+            'content' => 'like',
+            'user_id' => '=',
+            'post_id' => '=',
         ];
     
         foreach ($filters as $field => $operator) {
@@ -33,16 +37,17 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
                 $value = $request->input($field);
                 if ($operator === 'like') {
                     $query->where($field, $operator, '%' . $value . '%');
-                } elseif ($field === 'review_date') {
+                } elseif ($field === 'review_date' || $field === 'created_at' || $field === 'updated_at') {
                     $query->whereDate($field, $value);
                 } else {
                     $query->where($field, $operator, $value);
                 }
             }
         }
-        $limit = $request->input('limit', 10);
+
+        $perPage = $request->input('per_page', 10);
     
-        return $query->paginate($limit);
+        return $query->paginate($perPage);
     }
 
     public function getReview($id): Review

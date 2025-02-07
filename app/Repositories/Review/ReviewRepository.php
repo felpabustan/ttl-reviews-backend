@@ -37,7 +37,7 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
                 $value = $request->input($field);
                 if ($operator === 'like') {
                     $query->where($field, $operator, '%' . $value . '%');
-                } elseif ($field === 'review_date' || $field === 'created_at' || $field === 'updated_at') {
+                } elseif ($field === 'review_date') {
                     $query->whereDate($field, $value);
                 } else {
                     $query->where($field, $operator, $value);

@@ -45,6 +45,12 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
             }
         }
 
+        if ($request->has('order_by')) {
+            $orderBy = $request->input('order_by');
+            $orderDirection = $request->input('order_direction', 'asc');
+            $query->orderBy($orderBy, $orderDirection);
+        }
+
         $limit = $request->input('limit', 10);
     
         return $query->paginate($limit);

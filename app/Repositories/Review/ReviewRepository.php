@@ -129,7 +129,7 @@ class ReviewRepository extends Repository implements ReviewRepositoryInterface
             }
             return true;
         } catch (Exception $e) {
-            return false;
+            return $e->getMessage();
         }
     }
 }

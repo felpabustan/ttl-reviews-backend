@@ -1,20 +1,36 @@
 <?php
-
 namespace App\Http\Controllers\Review;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
+use App\Repositories\ApiToken\ApiTokenRepositoryInterface;
 use App\Repositories\Review\ReviewRepositoryInterface;
 
 class ReviewController extends Controller
 {
     protected $reviewRepository;
+    protected $apiTokenRepository;
 
-    public function __construct(ReviewRepositoryInterface $reviewRepository)
+    public function __construct(ReviewRepositoryInterface $reviewRepository, ApiTokenRepositoryInterface $apiTokenRepository)
     {
         $this->reviewRepository = $reviewRepository;
+        $this->apiTokenRepository = $apiTokenRepository;
+    }
+
+    /**
+     * Validate the API token.
+     */
+    private function validateToken(Request $request)
+    {
+        $token = $request->header('Authorization');
+
+        if (!$token || !$this->apiTokenRepository->validateToken($token)) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        return true;
     }
 
     /**
@@ -22,6 +38,11 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $reviews = $this->reviewRepository->getAllReviews($request);
         return response()->json($reviews);
     }
@@ -31,6 +52,11 @@ class ReviewController extends Controller
      */
     public function store(StoreReviewRequest $request)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $data = $request->validated();
         $review = $this->reviewRepository->createReview($data);
         return response()->json($review, 201);
@@ -39,8 +65,13 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $review = $this->reviewRepository->getReview($id);
         if (!$review) {
             return response()->json(['message' => 'Review not found'], 404);
@@ -53,6 +84,11 @@ class ReviewController extends Controller
      */
     public function update(UpdateReviewRequest $request, string $id)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $data = $request->validated();
 
         $review = $this->reviewRepository->updateReview($id, $data);
@@ -65,8 +101,13 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $deleted = $this->reviewRepository->deleteReview($id);
         if (!$deleted) {
             return response()->json(['message' => 'Review not found'], 404);
@@ -79,6 +120,11 @@ class ReviewController extends Controller
      */
     public function import(Request $request)
     {
+        $validationResponse = $this->validateToken($request);
+        if ($validationResponse !== true) {
+            return $validationResponse;
+        }
+
         $request->validate([
             'file' => 'required|file|mimes:csv,txt',
         ]);
